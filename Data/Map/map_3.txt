@@ -1,0 +1,37 @@
+init_block
+	size 		50	50
+
+	add	01	Data/Texture/1.png		Data/Texture/surface_1.txt
+	add	02	Data/Texture/2.png		Data/Texture/surface_2.txt
+	add	03	Data/Texture/3.png		Data/Texture/surface_3.txt
+	add	04	Data/Texture/4.png		Data/Texture/empty_surface.txt
+	add	05	Data/Texture/5.png		Data/Texture/empty_surface.txt
+	add	06	Data/Texture/6.png		Data/Texture/surface_6.txt
+	add	07	Data/Texture/7.png		Data/Texture/surface_7.txt
+	add	08	Data/Texture/8.png		Data/Texture/surface_8.txt
+	add	09	Data/Texture/9.png		Data/Texture/full_water_surface.txt
+	add	10	Data/Texture/10.png		Data/Texture/surface_10.txt
+	add	11	Data/Texture/11.png		Data/Texture/surface_11.txt
+	add	12	Data/Texture/12.png		Data/Texture/surface_12.txt
+	add	13	Data/Texture/13.png		Data/Texture/surface_13.txt
+	add	14	Data/Texture/14.png		Data/Texture/surface_14.txt
+	add	15	Data/Texture/15.png		Data/Texture/surface_15.txt
+
+end_block
+
+tiles_block
+	05 05 04 04 04 01 15 07 06 09 14 03 end_lines
+	04 05 05 04 04 10 09 08 11 06 09 08 end_lines
+	04 04 05 04 04 10 09 14 02 15 07 13 end_lines
+	04 04 04 04 04 11 06 09 09 07 13 04 end_lines
+	04 04 04 04 04 04 11 12 12 13 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+	04 04 04 04 04 04 04 04 04 04 04 04 end_lines
+end_block
+
+end_final

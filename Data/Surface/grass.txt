@@ -1,0 +1,8 @@
+init_block
+
+	type		solid
+	speed_modify	0.5
+	
+end_block
+
+end_final

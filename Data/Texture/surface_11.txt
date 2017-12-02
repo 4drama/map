@@ -1,0 +1,25 @@
+init_block
+	grain 	10	10
+	pixels	50	50
+
+	add		01		Data/Surface/grass.txt
+	add		wa		Data/Surface/water.txt
+	
+end_block
+
+surface_block
+
+	01 01 01 01 01 wa wa wa wa wa	end_lines
+	01 01 01 01 01 wa wa wa wa wa	end_lines
+	01 01 01 01 01 01 wa wa wa wa	end_lines
+	01 01 01 01 01 01 wa wa wa wa	end_lines
+	01 01 01 01 01 01 01 wa wa wa	end_lines
+	01 01 01 01 01 01 01 01 01 wa	end_lines
+	01 01 01 01 01 01 01 01 01 01	end_lines
+	01 01 01 01 01 01 01 01 01 01	end_lines
+	01 01 01 01 01 01 01 01 01 01	end_lines
+	01 01 01 01 01 01 01 01 01 01	end_lines
+	
+end_block
+
+end_final

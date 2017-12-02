@@ -1,0 +1,46 @@
+init_block
+	size 		50	50
+
+	add	01	Data/Texture/1.png		Data/Texture/surface_1.txt
+	add	02	Data/Texture/2.png		Data/Texture/surface_2.txt
+	add	03	Data/Texture/3.png		Data/Texture/surface_3.txt
+	add	04	Data/Texture/4.png		Data/Texture/empty_surface.txt
+	add	05	Data/Texture/5.png		Data/Texture/empty_surface.txt
+	add	06	Data/Texture/6.png		Data/Texture/surface_6.txt
+	add	07	Data/Texture/7.png		Data/Texture/surface_7.txt
+	add	08	Data/Texture/8.png		Data/Texture/surface_8.txt
+	add	09	Data/Texture/9.png		Data/Texture/full_water_surface.txt
+	add	10	Data/Texture/10.png		Data/Texture/surface_10.txt
+	add	11	Data/Texture/11.png		Data/Texture/surface_11.txt
+	add	12	Data/Texture/12.png		Data/Texture/surface_12.txt
+	add	13	Data/Texture/13.png		Data/Texture/surface_13.txt
+	add	14	Data/Texture/14.png		Data/Texture/surface_14.txt
+	add	15	Data/Texture/15.png		Data/Texture/surface_15.txt
+	add	16	Data/Texture/16.png		Data/Texture/empty_surface.txt
+	add	17	Data/Texture/17.png		Data/Texture/surface_17.txt
+	add	18	Data/Texture/18.png		Data/Texture/empty_surface.txt
+	add	19	Data/Texture/19.png		Data/Texture/empty_surface.txt
+	add	20	Data/Texture/20.png		Data/Texture/empty_surface.txt
+	add	21	Data/Texture/21.png		Data/Texture/empty_surface.txt
+	add	22	Data/Texture/22.png		Data/Texture/empty_surface.txt
+	add	23	Data/Texture/23.png		Data/Texture/empty_surface.txt
+	add	24	Data/Texture/24.png		Data/Texture/empty_surface.txt
+	add	30	Data/Texture/30.png		Data/Texture/empty_surface.txt
+end_block
+
+tiles_block
+	23 04 10 09 08 04 05 05 05 05 04 04 end_lines
+	19 04 10 09 08 04 05 05 05 05 04 21 end_lines
+	04 04 10 09 14 03 04 05 05 05 05 30 end_lines
+	04 05 10 09 09 08 04 05 05 05 05 05 end_lines
+	04 05 10 09 09 08 04 04 04 05 05 05 end_lines
+	01 02 15 09 09 08 04 21 16 05 05 05 end_lines
+	15 09 09 09 07 13 04 23 05 05 05 05 end_lines
+	09 09 09 09 17 24 18 19 04 05 04 04 end_lines
+	12 06 09 07 13 04 23 04 04 04 05 01 end_lines
+	05 10 09 08 04 21 19 04 01 02 02 15 end_lines
+	05 11 12 13 21 19 01 02 15 09 09 09 end_lines
+	05 05 04 04 23 04 10 09 09 09 07 12 end_lines
+end_block
+
+end_final

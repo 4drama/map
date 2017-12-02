@@ -1,0 +1,40 @@
+init_block
+	size 		50	50
+
+	add	g1	Data/Texture/1.png		Data/Texture/surface_1.txt
+	add	g0	Data/Texture/4.png		Data/Texture/empty_surface.txt
+	add	t1	Data/Texture/5.png		Data/Texture/empty_surface.txt
+	add	w2	Data/Texture/7.png		Data/Texture/surface_7.txt
+	add	wg	Data/Texture/8.png		Data/Texture/surface_8.txt
+	add	w0	Data/Texture/9.png		Data/Texture/full_water_surface.txt
+	add	gw	Data/Texture/10.png		Data/Texture/surface_10.txt
+	add	g3	Data/Texture/11.png		Data/Texture/surface_11.txt
+	add	GW	Data/Texture/12.png		Data/Texture/surface_12.txt
+	add	g4	Data/Texture/13.png		Data/Texture/surface_13.txt
+	add	15	Data/Texture/15.png		Data/Texture/surface_15.txt
+	add	32	Data/Texture/32.png		Data/Texture/empty_surface.txt
+	add	34	Data/Texture/34.png		Data/Texture/empty_surface.txt
+	add	40	Data/Texture/40.png		Data/Texture/empty_surface.txt
+	add	41	Data/Texture/41.png		Data/Texture/empty_surface.txt
+	add	42	Data/Texture/42.png		Data/Texture/empty_surface.txt
+	add	43	Data/Texture/43.png		Data/Texture/empty_surface.txt
+	add	44	Data/Texture/44.png		Data/Texture/empty_surface.txt
+
+end_block
+
+tiles_block
+	t1 g0 g0 g0 g0 g0 34 40 32 44 43 42 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 gw w0 wg 41 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g1 15 w2 g4 34 end_lines
+	g0 g0 g0 g0 g0 g0 g1 15 w0 wg g0 t1 end_lines
+	g0 g0 g0 g0 g0 g0 gw w0 w0 wg t1 t1 end_lines
+	g0 g0 g0 g0 g0 g0 g3 GW GW g4 g0 t1 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 end_lines
+	g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 g0 end_lines
+end_block
+
+end_final

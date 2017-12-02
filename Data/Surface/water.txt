@@ -1,0 +1,8 @@
+init_block
+
+	type			liquid
+	speed_modify	1
+	
+end_block
+
+end_final

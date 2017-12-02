@@ -1,0 +1,11 @@
+init_block
+
+#command	#name			#x_position	#y_position	#width		#height
+add		Data/Map/map_1.txt	0		0		600		600
+add		Data/Map/map_2.txt	600		0		600		600
+add		Data/Map/map_3.txt	0		600		600		600
+add		Data/Map/map_4.txt	600		600		600		600
+
+end_block
+
+end_final
