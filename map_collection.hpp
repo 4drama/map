@@ -21,6 +21,9 @@ public:
 		return (lhs.get() != rhs.get()) ? true : false;
 	}
 };*/
+class Map_collection;
+
+std::shared_ptr<surface> get_surface(sf::Vector2f new_position, Map_collection &map);
 
 class Map_collection{
 public:
@@ -91,5 +94,14 @@ private:
 		}
 	}
 };
+
+std::shared_ptr<surface> get_surface(sf::Vector2f new_position, Map_collection &map){
+	std::list<std::vector<Tile>::iterator> current_tiles;
+	current_tiles = map.get_tile(new_position);
+	assert(!current_tiles.empty());
+	std::shared_ptr<surface> next_surface;
+	next_surface = current_tiles.front()->get_surface(new_position);
+	return next_surface;
+}
 
 #endif

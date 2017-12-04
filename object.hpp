@@ -13,9 +13,14 @@ class graphics_handler;
 class object;
 
 //====================control_handler_declaration====================
-class control_handler{
+class control_handler : public std::enable_shared_from_this<control_handler>{
 public:
-	
+	void update(object &self, float time){
+		std::shared_ptr<control_handler> control_ptr = shared_from_this();
+		this->child_update(self, time);
+	}
+private:
+	virtual void child_update(object &self, float time) = 0;
 };
 //-------------------------------------------------------------------
 
@@ -24,13 +29,10 @@ public:
 class interact_handler{
 	using Point = geometry::Point;
 public:
-	virtual void update(object &self, float time) = 0;
+	virtual bool check(object &self, geometry::Point new_position) = 0;
 	
 	Point get_position(object &self) const;
 	void set_position(object &self, geometry::Point pos);
-
-	Point get_target(object &self) const;
-	void set_target(object &self, geometry::Point target);
 	
 	float get_speed(object &self) const;
 	
@@ -75,6 +77,9 @@ public:
 	
 	void set_interact(std::shared_ptr<interact_handler> ptr);	
 	std::shared_ptr<interact_handler> get_interact();
+	
+	void set_control(std::shared_ptr<control_handler> ptr);
+	std::shared_ptr<control_handler> get_control();
 	
 	void draw();
 	void update(float time);
@@ -125,6 +130,14 @@ std::shared_ptr<interact_handler> object::get_interact(){
 	return interact_ptr;
 }
 
+void object::set_control(std::shared_ptr<control_handler> ptr){
+	control_ptr = ptr;
+}
+
+std::shared_ptr<control_handler> object::get_control(){
+	return control_ptr;
+}
+
 void object::draw(){
 	if(graphics_ptr)
 		graphics_ptr->draw(*this);
@@ -132,8 +145,8 @@ void object::draw(){
 }
 
 void object::update(float time){
-	if(interact_ptr)	
-		interact_ptr->update(*this, time);
+	if(control_ptr)
+		control_ptr->update(*this, time);
 	
 	this->child_update(time);
 }
@@ -156,14 +169,6 @@ geometry::Point interact_handler::get_position(object &self) const{
 
 void interact_handler::set_position(object &self, geometry::Point pos){
 	self.position = pos;
-}
-
-geometry::Point interact_handler::get_target(object &self) const{
-	return self.target_position;
-}
-
-void interact_handler::set_target(object &self, geometry::Point target){
-	self.target_position = target;
 }
 
 float interact_handler::get_speed(object &self) const{

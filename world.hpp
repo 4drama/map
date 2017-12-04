@@ -14,6 +14,7 @@
 #include "object.hpp"
 #include "graphics_handler.hpp"
 #include "interact_handler.hpp"
+#include "control_handler.hpp"
 
 #include <memory>
 #include <string>
@@ -78,9 +79,14 @@ public:
 										<< world_position.x << ' ' << world_position.y << '\n';
 							
 						//	self->player.set_target(world_position);
-							self->player.get_interact()->set_target(
+						/*	self->player.get_interact()->set_target(
 									self->player, 
-									geometry::Point{world_position.x, world_position.y});
+									geometry::Point{world_position.x, world_position.y});*/
+							
+							std::shared_ptr<control_move> control;
+							control = std::shared_ptr<control_move>(new control_move());
+							control->set_target(geometry::Point{world_position.x, world_position.y});
+							self->player.set_control(control);
 							
 							auto test = self->map.get_tile(world_position);
 							
@@ -105,10 +111,13 @@ public:
 		
 		std::shared_ptr<window_graphics> graphics;
 		std::shared_ptr<object_interact> interact;
+		std::shared_ptr<control_move> control;
 		graphics = std::shared_ptr<window_graphics>(new window_graphics());
 		interact = std::shared_ptr<object_interact>(new object_interact());
+		control = std::shared_ptr<control_move>(new control_move());
 		graphics->init(&this->window);
 		interact->init(&this->map);
+		control->set_target(geometry::Point{200, 360});
 		
 		object_attribute boat_attr;
 		boat_attr.position = geometry::Point{150, 150};
@@ -119,8 +128,8 @@ public:
 		boat = object(boat_attr);
 		boat.set_graphics(graphics);
 		boat.set_interact(interact);
+		boat.set_control(control);
 		
-		interact->set_target(boat, geometry::Point{200, 360});
 		
 		object_attribute player_attr;
 		player_attr.position = geometry::Point{400, 400};
