@@ -9,12 +9,11 @@
 #include "keyboard.hpp"
 #include "map_chank.hpp"
 #include "map_collection.hpp"
-//#include "character.hpp"
-
 #include "object.hpp"
 #include "graphics_handler.hpp"
 #include "interact_handler.hpp"
 #include "control_handler.hpp"
+#include "object_collection.hpp"
 
 #include <memory>
 #include <string>
@@ -78,21 +77,19 @@ public:
 							std::cerr 	<< "world_position " 
 										<< world_position.x << ' ' << world_position.y << '\n';
 							
-						//	self->player.set_target(world_position);
-						/*	self->player.get_interact()->set_target(
-									self->player, 
-									geometry::Point{world_position.x, world_position.y});*/
-							
 							std::shared_ptr<control_move> control;
 							control = std::shared_ptr<control_move>(new control_move());
 							control->set_target(geometry::Point{world_position.x, world_position.y});
-							self->player.set_control(control);
 							
-							auto test = self->map.get_tile(world_position);
+							std::shared_ptr<object> current_object;
+							if(current_object = self->player.lock())
+								current_object->set_control(control);
+							
+						/*	auto test = self->map.get_tile(world_position);
 							
 							for (auto n : test) {
 							//	n->test();
-							}
+							}*/
 						}
 					
 					clock.restart();
@@ -117,18 +114,18 @@ public:
 		control = std::shared_ptr<control_move>(new control_move());
 		graphics->init(&this->window);
 		interact->init(&this->map);
-		control->set_target(geometry::Point{200, 360});
+		control->set_target(geometry::Point{205, 365});
 		
 		object_attribute boat_attr;
 		boat_attr.position = geometry::Point{150, 150};
 		boat_attr.radius = 8;
 		boat_attr.speed = 0.07;
 		boat_attr.surface = SURFACE_TYPE::LIQUID;
-		
-		boat = object(boat_attr);
-		boat.set_graphics(graphics);
-		boat.set_interact(interact);
-		boat.set_control(control);
+				
+		std::shared_ptr<object> boat = std::shared_ptr<object>(new object(boat_attr));
+		boat->set_graphics(graphics);
+		boat->set_interact(interact);
+		boat->set_control(control);
 		
 		
 		object_attribute player_attr;
@@ -137,10 +134,24 @@ public:
 		player_attr.speed = 0.05;
 		player_attr.surface = SURFACE_TYPE::SOLID;
 		
-		player = object(player_attr);
-		player.set_graphics(graphics);
-		player.set_interact(interact);
-	//	player = character(400, 400);
+		std::shared_ptr<object> player = std::shared_ptr<object>(new object(player_attr));
+		player->set_graphics(graphics);
+		player->set_interact(interact);
+		
+		player_attr.position = geometry::Point{420, 450};
+		
+		std::shared_ptr<object> npc = std::shared_ptr<object>(new object(player_attr));
+		npc->set_graphics(graphics);
+		npc->set_interact(interact);
+		
+//		control->update(*boat , 0);
+		control->update(*player , 0);
+		control->update(*npc , 0);
+
+		objects.add(boat->shared_from_this());
+		objects.add(player->shared_from_this());				
+		objects.add(npc->shared_from_this());
+		this->player = player;
 	}
 	
 	void Cicle(){
@@ -166,15 +177,9 @@ public:
 			this->keyboard.update(time);
 			
 			this->map.draw(this->window, this->view);
-			
-		//	player.update(time, this->map);
-		//	player.draw(this->window);
-			
-			boat.update(time);
-			boat.draw();
-			
-			player.update(time);
-			player.draw();
+						
+			objects.update(time);
+			objects.draw();
 			
 			this->window.draw(this->frame_sprite);
 			
@@ -200,9 +205,8 @@ private:
 	sf::Texture frame_texture;
 	sf::Sprite frame_sprite;
 	
-//	character player;
-	object player;
-	object boat;
+	object_collection objects;
+	std::weak_ptr<object> player;
 };
 
 #endif

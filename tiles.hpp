@@ -5,8 +5,10 @@
 
 #include "cache.hpp"
 #include "surface.hpp"
+#include "object.hpp"
 
 #include <memory>
+#include <list>
 
 class Tile_base;
 
@@ -16,6 +18,26 @@ public:
 	void draw(sf::RenderWindow &window, sf::View &view);
 	
 	bool check_position(const sf::Vector2f point);
+	
+	void add_object(object &obj){
+		objects.push_front(obj.shared_from_this());
+	}
+	
+	void remove_object(object &obj){
+		objects.remove_if([need = obj.shared_from_this()](std::weak_ptr<object> current){
+				return (current.lock() == need) ? true : false;
+			});
+	}
+	
+	std::list<std::shared_ptr<object> > get_objects() const {
+		std::list<std::shared_ptr<object> > result;
+		for (auto& current : objects){
+			std::shared_ptr<object> obj;
+			if(obj = current.lock())
+				result.push_front(obj);
+		}
+		return result;
+	}
 	
 	void test(){
 		texture = nullptr;
@@ -34,7 +56,8 @@ private:
 	sf::Sprite sprite;
 	std::shared_ptr<Tile_base> base;
 	std::shared_ptr<sf::Texture> texture;
-
+	std::list<std::weak_ptr<object> > objects;
+	
 	Tile(int x_pos_, int y_pos_, std::shared_ptr<Tile_base> base_);
 	bool view_check(sf::View &view);	
 };

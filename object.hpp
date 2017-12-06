@@ -66,7 +66,7 @@ struct object_attribute{
 
 
 //=======================object_declaration==========================
-class object{
+class object : public std::enable_shared_from_this<object> {
 	friend class interact_handler;
 public:
 	object() = default;
