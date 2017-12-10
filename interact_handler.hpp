@@ -22,7 +22,12 @@ public:
 	
 private:
 	
-	bool check(object &self, geometry::Point new_position) override{
+	bool check(object &self, geometry::Point target_position, double radius) override{
+		double range = geometry::Range(this->get_position(self), target_position);
+		return range < (this->interact_range + radius + this->get_radius(self)) ? true : false;
+	}
+	
+	bool walk(object &self, geometry::Point new_position) override{
 		if(this->get_surface(self) == nullptr)
 			this->set_surface(self, this->update_surface(
 							sf::Vector2f{(float)new_position.x, (float)new_position.y}));
@@ -78,13 +83,13 @@ private:
 		float radius = this->get_radius(self);
 		
 		all_near_tiles.merge(map->get_tile
-				(sf::Vector2f{(float)(position.x - radius), (float)(position.y - radius)}));
+				(sf::Vector2f{(float)(position.x - (radius*3)), (float)(position.y - (radius*3))}));
 		all_near_tiles.merge(map->get_tile
-				(sf::Vector2f{(float)(position.x + radius), (float)(position.y - radius)}));
+				(sf::Vector2f{(float)(position.x + (radius*3)), (float)(position.y - (radius*3))}));
 		all_near_tiles.merge(map->get_tile
-				(sf::Vector2f{(float)(position.x - radius), (float)(position.y + radius)}));
+				(sf::Vector2f{(float)(position.x - (radius*3)), (float)(position.y + (radius*3))}));
 		all_near_tiles.merge(map->get_tile
-				(sf::Vector2f{(float)(position.x + radius), (float)(position.y + radius)}));
+				(sf::Vector2f{(float)(position.x + (radius*3)), (float)(position.y + (radius*3))}));
 		
 		all_near_tiles.unique();
 		
@@ -100,6 +105,7 @@ private:
 		return next_surface;
 	}
 	
+	double interact_range = 5;
 	Map_collection *map;
 };
 

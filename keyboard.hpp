@@ -19,9 +19,6 @@ private:
 	Key_list_type		keys;
 	Button_list_type	buttons;
 public:
-	KeyboardFunction(){
-		
-	}
 	
 	void add(sf::Keyboard::Key key, std::function<void(float)> func){
 		keys.push_back(std::make_pair(key, func));

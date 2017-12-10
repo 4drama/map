@@ -82,7 +82,7 @@ private:
 };
 
 Tile::Tile(int x_pos_, int y_pos_, std::shared_ptr<Tile_base> base_)
-		:	base(base_), state(State::outView){
+		:	state(State::outView), base(base_){
 	sprite.setPosition(x_pos_, y_pos_);
 }
 	
@@ -159,8 +159,8 @@ Tile_base::Tile_base(	const std::string &filename_, const std::string &surface_p
 						int x_size_, int y_size_,
 						std::shared_ptr<Cache> &conteiner_, 
 						std::shared_ptr<file_cache<surface> > cache_surface_ptr)
-		:	filename(filename_), x_size(x_size_), y_size(y_size_), 
-			conteiner(conteiner_), area(surface_path, cache_surface_ptr){	
+		:	conteiner(conteiner_), area(surface_path, cache_surface_ptr),
+			filename(filename_), x_size(x_size_), y_size(y_size_){	
 }
 
 Tile Tile_base::create_tile(int x_position, int y_position){

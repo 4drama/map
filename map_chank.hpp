@@ -221,8 +221,8 @@ auto_loading_map_chank::auto_loading_map_chank(
 				const std::string& filename_, std::shared_ptr<Cache>& conteiner_,
 				int x_position, int y_position, int width, int height,
 				std::shared_ptr<file_cache<surface> > cache_surface_ptr_)
-		:	conteiner(conteiner_), filename(filename_), state(State::outView),
-			cache_surface_ptr(cache_surface_ptr_){
+		:	conteiner(conteiner_), cache_surface_ptr(cache_surface_ptr_),
+			filename(filename_), state(State::outView){
 	area.left = x_position;
 	area.top = y_position;
 	area.width = width;

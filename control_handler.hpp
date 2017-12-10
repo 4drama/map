@@ -22,14 +22,14 @@ private:
 		if(old_position != this->end_position){
 			geometry::Point new_position;
 			
-			interact_ptr->check(self, old_position);
+			interact_ptr->walk(self, old_position);
 			
 			float new_speed = 	interact_ptr->get_speed(self) * 
 								interact_ptr->get_surface(self)->get_modify();
 			
 			new_position = geometry::Shift(	old_position, this->end_position, time, new_speed);
 			
-			if(interact_ptr->check(self, new_position)){
+			if(interact_ptr->walk(self, new_position)){
 				
 			//	interact_ptr->set_surface(self, next_surface);
 			//	interact_ptr->set_position(self, new_position);

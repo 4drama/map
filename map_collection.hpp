@@ -70,6 +70,46 @@ public:
 		return tile_list;
 	};
 	
+	std::list<std::shared_ptr<object> > get_objects(sf::Vector2f point){
+		std::list<std::shared_ptr<object> > result;
+		
+		std::list<std::vector<Tile>::iterator> tiles = this->get_tile(point);
+
+		tiles.merge(this->get_tile
+				(sf::Vector2f{(float)(point.x - 20), (float)(point.y - 20)}));
+		tiles.merge(this->get_tile
+				(sf::Vector2f{(float)(point.x + 20), (float)(point.y - 20)}));
+		tiles.merge(this->get_tile
+				(sf::Vector2f{(float)(point.x - 20), (float)(point.y + 20)}));
+		tiles.merge(this->get_tile
+				(sf::Vector2f{(float)(point.x + 20), (float)(point.y + 20)}));
+		tiles.unique();
+		
+		for (auto& current_tile : tiles){
+			std::list<std::shared_ptr<object> > objects = current_tile->get_objects();
+			result.merge(objects);
+		}
+		
+		result.unique();
+		
+		std::shared_ptr<interact_handler> interact;
+		for (auto& object : result){
+			interact = object->get_interact();
+			
+			geometry::Point position = interact->get_position(*object);
+			double max_range = interact->get_radius(*object);
+			
+			double curr_range = geometry::Range(position, geometry::Point{point.x, point.y});
+			if(curr_range > max_range){
+				result.remove(object);
+			}
+		}
+		
+		std::cerr << "objects in " << point.x << ',' << point.y << " = " << result.size() << std::endl;
+		
+		return result;
+	}
+	
 private:
 	std::vector<auto_loading_map_chank> complete_map;
 //	std::set<std::shared_ptr<map_chank>, shared_cmp<map_chank> > grab_chank;

@@ -94,6 +94,48 @@ public:
 					
 					clock.restart();
 				});
+		this->keyboard.add(sf::Mouse::Button::Right, [self = this](float time_arg){
+					static float		time;
+					static sf::Clock 	clock;
+					
+					time = clock.getElapsedTime().asMilliseconds();				
+				
+						if(time > 50 || time == 0){
+							sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
+							sf::Vector2f centre_position	= self->view.getCenter();
+							sf::Vector2f offset(	(self->resolution.width / 2) * 0.75,
+													(self->resolution.height / 2) * 0.75	);
+							
+							sf::Vector2f world_position
+									(	centre_position.x - offset.x + (mouse_position.x * 0.75),
+										centre_position.y - offset.y + (mouse_position.y * 0.75));
+							
+							std::cerr 	<< "world_position " 
+										<< world_position.x << ' ' << world_position.y << '\n';
+							
+							std::list<std::shared_ptr<object> > objects;
+							objects = self->map.get_objects(world_position);
+							
+							std::shared_ptr<object> player;
+							std::shared_ptr<interact_handler> player_interact;
+							if(player = self->player.lock())
+								player_interact = player->get_interact();
+							else
+								return;
+							
+							for (auto& obj : objects){
+								std::shared_ptr<interact_handler> target_interact = obj->get_interact();
+								geometry::Point target_position = target_interact->get_position(*obj);
+								double radius = target_interact->get_radius(*obj);
+								if(player_interact->check(*player, target_position, radius)){
+									std::cerr << "interact" << std::endl;
+								}
+							}
+						}
+					
+					clock.restart();
+				});
+		
 		
 		this->cache = std::shared_ptr<Cache>(new Cache());
 		this->cache_surface_ptr = std::shared_ptr<file_cache<surface> >(new file_cache<surface>());

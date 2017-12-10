@@ -19,6 +19,7 @@ public:
 		std::shared_ptr<control_handler> control_ptr = shared_from_this();
 		this->child_update(self, time);
 	}
+	virtual ~control_handler() = 0;
 private:
 	virtual void child_update(object &self, float time) = 0;
 };
@@ -29,7 +30,8 @@ private:
 class interact_handler{
 	using Point = geometry::Point;
 public:
-	virtual bool check(object &self, geometry::Point new_position) = 0;
+	virtual bool walk(object &self, geometry::Point new_position) = 0;
+	virtual bool check(object &self, geometry::Point target_position, double radius) = 0;
 	
 	Point get_position(object &self) const;
 	void set_position(object &self, geometry::Point pos);
@@ -41,6 +43,8 @@ public:
 	
 	SURFACE_TYPE get_surface_type(object &self) const;
 	float get_radius(object &self) const;
+	
+	virtual ~interact_handler() = 0;
 };
 //-------------------------------------------------------------------
 
@@ -49,6 +53,8 @@ public:
 class graphics_handler{
 public:
 	virtual void draw(object &self) = 0;
+	
+	virtual ~graphics_handler() = 0;
 };
 //-------------------------------------------------------------------
 
@@ -83,6 +89,8 @@ public:
 	
 	void draw();
 	void update(float time);
+	
+	virtual ~object() = default;
 	
 private:
 	virtual void child_draw();	
@@ -190,6 +198,13 @@ SURFACE_TYPE interact_handler::get_surface_type(object &self) const{
 float interact_handler::get_radius(object &self) const{
 	return self.collision_radius;
 }
+//-------------------------------------------------------------------
+
+
+//===================================================================
+control_handler::~control_handler() = default;
+interact_handler::~interact_handler() = default;
+graphics_handler::~graphics_handler() = default;
 //-------------------------------------------------------------------
 
 #endif
