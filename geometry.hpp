@@ -30,9 +30,7 @@ namespace geometry{
 	
 	Point Shift(Point start_point, Point end_point, double time, double speed);
 	
-	const bool operator!=(const Point &arg1, const Point &arg2){
-		return !(arg1 == arg2);
-	}
+	const bool operator!=(const Point &arg1, const Point &arg2);
 }
 
 #endif

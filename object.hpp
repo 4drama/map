@@ -27,11 +27,20 @@ private:
 
 
 //===================interact_handler_declaration====================
+
+/*struct interact_attribute{
+	std::variant<geometry::Point, shared_ptr<object> > target;
+};*/
+
 class interact_handler{
 	using Point = geometry::Point;
 public:
 	virtual bool walk(object &self, geometry::Point new_position) = 0;
 	virtual bool check(object &self, geometry::Point target_position, double radius) = 0;
+	bool check(object &self, object &other);
+//	std::list<std::string> 	get_interact(object &self, interact_attribute &attr);
+//	void set_interact(std::string name, std::function<void(interact_attribute&) func>);
+//	void do_interact(object &self, std::string name, interact_attribute &attr);
 	
 	Point get_position(object &self) const;
 	void set_position(object &self, geometry::Point pos);
@@ -110,101 +119,6 @@ private:
 	std::shared_ptr<graphics_handler>		graphics_ptr;
 	
 };
-//-------------------------------------------------------------------
-
-
-//=======================object_implementation=======================
-object::object(object_attribute &attr)
-		:	position{attr.position},
-			collision_radius(attr.radius),
-			target_position(position),
-			speed(attr.speed),
-			surface_type(attr.surface){
-}
-
-void object::set_graphics(std::shared_ptr<graphics_handler> ptr){
-	graphics_ptr = ptr;
-}
-
-std::shared_ptr<graphics_handler> object::get_graphics(){
-	return this->graphics_ptr;
-}
-
-void object::set_interact(std::shared_ptr<interact_handler> ptr){
-	interact_ptr = ptr;
-}
-
-std::shared_ptr<interact_handler> object::get_interact(){
-	return interact_ptr;
-}
-
-void object::set_control(std::shared_ptr<control_handler> ptr){
-	control_ptr = ptr;
-}
-
-std::shared_ptr<control_handler> object::get_control(){
-	return control_ptr;
-}
-
-void object::draw(){
-	if(graphics_ptr)
-		graphics_ptr->draw(*this);
-	this->child_draw();
-}
-
-void object::update(float time){
-	if(control_ptr)
-		control_ptr->update(*this, time);
-	
-	this->child_update(time);
-}
-
-void object::child_draw(){
-	return ;
-}
-
-void object::child_update(float time){
-	return ;
-}
-
-//-------------------------------------------------------------------
-
-
-//=================interact_handler_implementation===================
-geometry::Point interact_handler::get_position(object &self) const{
-	return self.position;
-}
-
-void interact_handler::set_position(object &self, geometry::Point pos){
-	self.position = pos;
-}
-
-float interact_handler::get_speed(object &self) const{
-	return self.speed;
-}
-
-std::shared_ptr<surface> interact_handler::get_surface(object &self){
-	return self.current_surface;
-}
-
-void interact_handler::set_surface(object &self, std::shared_ptr<surface> surface_ptr){
-	self.current_surface = surface_ptr;
-}
-
-SURFACE_TYPE interact_handler::get_surface_type(object &self) const{
-	return self.surface_type;
-}
-
-float interact_handler::get_radius(object &self) const{
-	return self.collision_radius;
-}
-//-------------------------------------------------------------------
-
-
-//===================================================================
-control_handler::~control_handler() = default;
-interact_handler::~interact_handler() = default;
-graphics_handler::~graphics_handler() = default;
 //-------------------------------------------------------------------
 
 #endif

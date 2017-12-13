@@ -2,6 +2,7 @@
 #define FILE_CACHE__
 
 #include <memory>
+#include <map>
 
 template<class T>
 class file_cache : public std::enable_shared_from_this<file_cache<T> >{

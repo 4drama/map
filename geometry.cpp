@@ -51,3 +51,7 @@ geometry::Point geometry::Shift(	geometry::Point start_point,
 		return start_point + traveled;
 	}
 }
+
+const bool geometry::operator!=(const geometry::Point &arg1, const geometry::Point &arg2){
+	return !(arg1 == arg2);
+}
