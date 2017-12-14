@@ -11,6 +11,8 @@
 #include <fstream>
 #include <string>
 
+#include "mouse.hpp"
+
 #include <iostream>
 
 World::World(){
@@ -54,6 +56,9 @@ World::World(){
 				time = clock.getElapsedTime().asMilliseconds();				
 			
 					if(time > 50 || time == 0){
+			//			self->one.reset();
+						self->two = nullptr;
+						
 						sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
 						sf::Vector2f centre_position	= self->view.getCenter();
 						sf::Vector2f offset(	(self->resolution.width / 2) * 0.75,
@@ -90,6 +95,9 @@ World::World(){
 				time = clock.getElapsedTime().asMilliseconds();				
 			
 					if(time > 50 || time == 0){
+			//			self->one.reset();
+						self->two = nullptr;
+						
 						sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
 						sf::Vector2f centre_position	= self->view.getCenter();
 						sf::Vector2f offset(	(self->resolution.width / 2) * 0.75,
@@ -115,6 +123,11 @@ World::World(){
 						for (auto& obj : objects){
 							if(player_interact->check(*player, *obj)){
 								std::cerr << "interact" << std::endl;
+								std::list<std::string> opt;
+								opt.push_front("one");
+								opt.push_front("two");
+								self->two = std::shared_ptr<dialog>(new dialog(world_position, opt));
+			//					self->one = dialog(mouse_position.x * 0.75, mouse_position.y * 0.75);
 							}
 						}
 					}
@@ -180,6 +193,7 @@ World::World(){
 	objects.add(player->shared_from_this());				
 	objects.add(npc->shared_from_this());
 	this->player = player;
+	
 }
 
 void World::Cicle(){
@@ -208,6 +222,15 @@ void World::Cicle(){
 					
 		objects.update(time);
 		objects.draw();
+		
+		
+//		one.draw(this->window, this->view);
+//		one.update(time, this->window, this->view);
+		
+		if(two != nullptr){
+			two->draw(this->window);
+			two->update(mouse_world_position(this->window, this->view));
+		}
 		
 		this->window.draw(this->frame_sprite);
 		

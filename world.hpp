@@ -12,6 +12,8 @@
 
 #include <memory>
 
+#include "gui.hpp"
+
 class World{
 public:
 	World();
@@ -36,6 +38,9 @@ private:
 	
 	object_collection objects;
 	std::weak_ptr<object> player;
+	
+	std::shared_ptr<dialog> two;
+//	dialog one;
 };
 
 #endif
