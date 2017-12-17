@@ -21,6 +21,7 @@ public:
 private:
 	sf::Vector2f position;
 	std::list<dialog_component> components;
+	sf::RectangleShape frame;
 };
 
 class dialog_component{
@@ -32,8 +33,10 @@ public:
 	void update(sf::Vector2f mouse_world_position);
 	
 private:
-	sf::RectangleShape area;
-	std::string text;
+	sf::RectangleShape 	area;
+	sf::Font 			font;
+	std::string 		text;
+	sf::Color 			text_color;
 };
 
 #endif

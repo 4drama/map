@@ -1,5 +1,12 @@
 #include "object.hpp"
 
+std::list<std::string> get_interact_list(object &first, object &second){
+	std::list<std::string> result;
+	result.push_front("one");
+	result.push_front("two");
+	return result;
+}
+
 //=======================object_implementation=======================
 object::object(object_attribute &attr)
 		:	position{attr.position},

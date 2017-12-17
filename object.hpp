@@ -4,6 +4,8 @@
 #include "geometry.hpp"
 #include "surface.hpp"
 
+#include <list>
+#include <string>
 #include <memory>
 
 class control_handler;
@@ -11,6 +13,8 @@ class interact_handler;
 class graphics_handler;
 
 class object;
+
+std::list<std::string> get_interact_list(object &first, object &second);
 
 //====================control_handler_declaration====================
 class control_handler : public std::enable_shared_from_this<control_handler>{

@@ -57,7 +57,7 @@ World::World(){
 			
 					if(time > 50 || time == 0){
 			//			self->one.reset();
-						self->two = nullptr;
+					//	self->two = nullptr;
 						
 						sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
 						sf::Vector2f centre_position	= self->view.getCenter();
@@ -71,19 +71,18 @@ World::World(){
 						std::cerr 	<< "world_position " 
 									<< world_position.x << ' ' << world_position.y << '\n';
 						
-						std::shared_ptr<control_move> control;
-						control = std::shared_ptr<control_move>(new control_move());
-						control->set_target(geometry::Point{world_position.x, world_position.y});
-						
-						std::shared_ptr<object> current_object;
-						if(current_object = self->player.lock())
-							current_object->set_control(control);
-						
-					/*	auto test = self->map.get_tile(world_position);
-						
-						for (auto n : test) {
-						//	n->test();
-						}*/
+						if((self->two != nullptr) && self->two->check(world_position)){
+							std::cerr << self->two->get(world_position) << std::endl;
+						} else {
+							std::shared_ptr<control_move> control;
+							control = std::shared_ptr<control_move>(new control_move());
+							control->set_target(geometry::Point{world_position.x, world_position.y});
+							
+							std::shared_ptr<object> current_object;
+							if(current_object = self->player.lock())
+								current_object->set_control(control);
+						}
+						self->two = nullptr;
 					}
 				
 				clock.restart();
@@ -123,10 +122,13 @@ World::World(){
 						for (auto& obj : objects){
 							if(player_interact->check(*player, *obj)){
 								std::cerr << "interact" << std::endl;
-								std::list<std::string> opt;
+								std::list<std::string> interact_dialog;
+								interact_dialog = get_interact_list(*player, *obj);
+							/*	std::list<std::string> opt;
 								opt.push_front("one");
-								opt.push_front("two");
-								self->two = std::shared_ptr<dialog>(new dialog(world_position, opt));
+								opt.push_front("two");*/
+								self->two = std::shared_ptr<dialog>(
+										new dialog(world_position, interact_dialog));
 			//					self->one = dialog(mouse_position.x * 0.75, mouse_position.y * 0.75);
 							}
 						}
