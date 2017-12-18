@@ -8,13 +8,16 @@
 #include <string>
 #include <memory>
 
+#include "interact.hpp"
+
 class control_handler;
 class interact_handler;
 class graphics_handler;
 
 class object;
 
-std::list<std::string> get_interact_list(object &first, object &second);
+class interact;
+class interact_attribute;
 
 //====================control_handler_declaration====================
 class control_handler : public std::enable_shared_from_this<control_handler>{
@@ -88,6 +91,7 @@ struct object_attribute{
 class object : public std::enable_shared_from_this<object> {
 	friend class interact_handler;
 public:
+	
 	object() = default;
 	object(object_attribute &attr);
 	
@@ -99,6 +103,10 @@ public:
 	
 	void set_control(std::shared_ptr<control_handler> ptr);
 	std::shared_ptr<control_handler> get_control();
+	
+	void add_interact(std::shared_ptr<interact>);
+	std::list<std::string> get_correct_interact(interact_attribute &attr);
+//	void interact
 	
 	void draw();
 	void update(float time);
@@ -122,6 +130,7 @@ private:
 	std::shared_ptr<interact_handler>		interact_ptr;
 	std::shared_ptr<graphics_handler>		graphics_ptr;
 	
+	std::list<std::shared_ptr<interact> >	interact_list;
 };
 //-------------------------------------------------------------------
 

@@ -1,12 +1,5 @@
 #include "object.hpp"
 
-std::list<std::string> get_interact_list(object &first, object &second){
-	std::list<std::string> result;
-	result.push_front("one");
-	result.push_front("two");
-	return result;
-}
-
 //=======================object_implementation=======================
 object::object(object_attribute &attr)
 		:	position{attr.position},
@@ -38,6 +31,20 @@ void object::set_control(std::shared_ptr<control_handler> ptr){
 
 std::shared_ptr<control_handler> object::get_control(){
 	return control_ptr;
+}
+
+void object::add_interact(std::shared_ptr<interact> new_interact){
+	this->interact_list.push_front(new_interact);
+}
+
+std::list<std::string> object::get_correct_interact(interact_attribute &attr){
+	std::list<std::string> result;
+	
+	for(auto& current : this->interact_list){
+		result.merge(current->get(attr));
+	}
+	
+	return result;
 }
 
 void object::draw(){

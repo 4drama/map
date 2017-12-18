@@ -8,6 +8,8 @@
 #include "interact_handler.hpp"
 #include "control_handler.hpp"
 
+#include "interact.hpp"
+
 #include <fstream>
 #include <string>
 
@@ -16,6 +18,8 @@
 #include <iostream>
 
 World::World(){
+	using interact_type = interact;
+	
 	std::fstream setting("setting.txt", std::ios::in);
 	std::string command;
 	int res_x, res_y;
@@ -73,6 +77,7 @@ World::World(){
 						
 						if((self->two != nullptr) && self->two->check(world_position)){
 							std::cerr << self->two->get(world_position) << std::endl;
+							
 						} else {
 							std::shared_ptr<control_move> control;
 							control = std::shared_ptr<control_move>(new control_move());
@@ -110,26 +115,41 @@ World::World(){
 									<< world_position.x << ' ' << world_position.y << '\n';
 						
 						std::list<std::shared_ptr<object> > objects;
+						
+
 						objects = self->map.get_objects(world_position);
 						
-						std::shared_ptr<object> player;
-						std::shared_ptr<interact_handler> player_interact;
-						if(player = self->player.lock())
-							player_interact = player->get_interact();
-						else
-							return;
+						if(objects.empty()){
+							/* surface interact */
+						} else {
 						
-						for (auto& obj : objects){
-							if(player_interact->check(*player, *obj)){
-								std::cerr << "interact" << std::endl;
-								std::list<std::string> interact_dialog;
-								interact_dialog = get_interact_list(*player, *obj);
-							/*	std::list<std::string> opt;
-								opt.push_front("one");
-								opt.push_front("two");*/
-								self->two = std::shared_ptr<dialog>(
-										new dialog(world_position, interact_dialog));
-			//					self->one = dialog(mouse_position.x * 0.75, mouse_position.y * 0.75);
+							std::shared_ptr<object> player;
+							std::shared_ptr<interact_handler> player_interact;
+							if(player = self->player.lock())
+								player_interact = player->get_interact();
+							else
+								return;
+							
+							for (auto& obj : objects){
+								if(player_interact->check(*player, *obj)){
+									interact_attribute player_attr;
+									player_attr.controlled_flag = 1;
+									player_attr.object_ptr = player;
+									player_attr.object_collection_ptr = &self->objects;
+									
+									interact_attribute other_attr;
+									player_attr.object_ptr = obj;
+									player_attr.object_collection_ptr = &self->objects;
+									
+									std::cerr << "interact" << std::endl;
+									std::list<std::string> interact_dialog;
+								//	interact_dialog = get_interact_list(*player, *obj);
+									interact_dialog = get_interact_list(player_attr, other_attr);
+
+									self->two = std::shared_ptr<dialog>(
+											new dialog(world_position, interact_dialog));
+				//					self->one = dialog(mouse_position.x * 0.75, mouse_position.y * 0.75);
+								}
 							}
 						}
 					}
@@ -169,6 +189,9 @@ World::World(){
 	boat->set_graphics(graphics);
 	boat->set_interact(interact);
 	boat->set_control(control);
+	std::shared_ptr<interact_type> boat_interact;
+	boat_interact = contain_interact::create();
+	boat->add_interact(boat_interact);
 	
 	
 	object_attribute player_attr;

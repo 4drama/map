@@ -6,7 +6,7 @@ LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lstdc++
 SOURCES=main.cpp cache.cpp keyboard.cpp tiles.cpp \
 geometry.cpp object.cpp graphics_handler.cpp control_handler.cpp \
 interact_handler.cpp object_collection.cpp surface.cpp world.cpp \
-map_collection.cpp map_chank.cpp gui.cpp mouse.cpp
+map_collection.cpp map_chank.cpp gui.cpp mouse.cpp interact.cpp
 
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=map
