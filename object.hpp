@@ -105,7 +105,10 @@ public:
 	std::shared_ptr<control_handler> get_control();
 	
 	void add_interact(std::shared_ptr<interact>);
-	std::list<std::string> get_correct_interact(interact_attribute &attr);
+	std::list<std::string> get_correct_interact_list(interact_attribute &attr);
+	std::shared_ptr<interact> find_interact(	std::string find_command,
+												interact_attribute &other_attr);
+//	void interact(std::string name, interact_attribute &attr);
 //	void interact
 	
 	void draw();

@@ -9,6 +9,7 @@
 #include "surface.hpp"
 #include "map_collection.hpp"
 #include "object_collection.hpp"
+#include "interact_gui.hpp"
 
 #include <memory>
 
@@ -39,7 +40,8 @@ private:
 	object_collection objects;
 	std::weak_ptr<object> player;
 	
-	std::shared_ptr<dialog> two;
+	std::shared_ptr<interact_gui> three;
+//	std::shared_ptr<dialog> two;
 //	dialog one;
 };
 

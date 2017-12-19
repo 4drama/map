@@ -20,9 +20,20 @@ std::list<std::string> get_interact_list(	interact_attribute &first_attr,
 											interact_attribute &second_attr){
 	std::list<std::string> result;
 	if(first_attr.object_ptr)
-		result.merge(first_attr.object_ptr->get_correct_interact(second_attr));
+		result.merge(first_attr.object_ptr->get_correct_interact_list(second_attr));
 	if(second_attr.object_ptr)
-		result.merge(first_attr.object_ptr->get_correct_interact(first_attr));
+		result.merge(second_attr.object_ptr->get_correct_interact_list(first_attr));
+	return result;
+}
+
+std::shared_ptr<interact> find_interact(	std::string 		&command, 
+											interact_attribute 	&main_attr,
+											interact_attribute 	&service_attr){
+	std::shared_ptr<interact> result = nullptr;
+	
+	if(main_attr.object_ptr){
+		result = main_attr.object_ptr->find_interact(command, service_attr);
+	}
 	return result;
 }
 
@@ -74,6 +85,7 @@ void contain_interact::execute_core(std::string command, interact_attribute &att
 	if(command == "in"){
 		if(this->check_core("in", attr)){
 			this->object_contain = attr.object_ptr;
+			assert(attr.object_ptr);
 			attr.object_collection_ptr->destroy(attr.object_ptr);
 		}
 	} else if(command == "out"){

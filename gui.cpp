@@ -23,9 +23,11 @@ dialog::dialog(sf::Vector2f position_, std::list<std::string> options_)
 }
 
 void dialog::draw(sf::RenderWindow &window) const{
-	window.draw(this->frame);
-	for(auto& entry : this->components){
-		entry.draw(window);
+	if(!this->components.empty()){
+		window.draw(this->frame);
+		for(auto& entry : this->components){
+			entry.draw(window);
+		}
 	}
 }
 

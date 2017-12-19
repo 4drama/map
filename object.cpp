@@ -37,7 +37,7 @@ void object::add_interact(std::shared_ptr<interact> new_interact){
 	this->interact_list.push_front(new_interact);
 }
 
-std::list<std::string> object::get_correct_interact(interact_attribute &attr){
+std::list<std::string> object::get_correct_interact_list(interact_attribute &attr){
 	std::list<std::string> result;
 	
 	for(auto& current : this->interact_list){
@@ -45,6 +45,22 @@ std::list<std::string> object::get_correct_interact(interact_attribute &attr){
 	}
 	
 	return result;
+}
+/*
+void object::interact(std::string name, interact_attribute &attr){
+	interact_attribute null_atr;
+//	std::shared_ptr<interact> current =  find_interact(name, null_atr, );
+}*/
+
+std::shared_ptr<interact> object::find_interact(	std::string find_command, 
+													interact_attribute &other_attr){
+	for(auto& current_interact : this->interact_list){
+		for(std::string current_command : current_interact->get(other_attr)){
+			if(current_command == find_command)
+				return current_interact;
+		}
+	}
+	return nullptr;
 }
 
 void object::draw(){

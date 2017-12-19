@@ -75,9 +75,11 @@ World::World(){
 						std::cerr 	<< "world_position " 
 									<< world_position.x << ' ' << world_position.y << '\n';
 						
-						if((self->two != nullptr) && self->two->check(world_position)){
-							std::cerr << self->two->get(world_position) << std::endl;
-							
+					//	if(/*(self->two != nullptr) && self->two->check(world_position)*/){
+						if(self->three->check(world_position)){
+						//	std::cerr << self->two->get(world_position) << std::endl;
+							self->three->execute(world_position);
+							std::cerr << "execute" << std::endl;
 						} else {
 							std::shared_ptr<control_move> control;
 							control = std::shared_ptr<control_move>(new control_move());
@@ -87,7 +89,8 @@ World::World(){
 							if(current_object = self->player.lock())
 								current_object->set_control(control);
 						}
-						self->two = nullptr;
+					//	self->two = nullptr;
+						self->three->clean();
 					}
 				
 				clock.restart();
@@ -100,7 +103,8 @@ World::World(){
 			
 					if(time > 50 || time == 0){
 			//			self->one.reset();
-						self->two = nullptr;
+					//	self->two = nullptr;
+						self->three->clean();
 						
 						sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
 						sf::Vector2f centre_position	= self->view.getCenter();
@@ -138,16 +142,19 @@ World::World(){
 									player_attr.object_collection_ptr = &self->objects;
 									
 									interact_attribute other_attr;
-									player_attr.object_ptr = obj;
-									player_attr.object_collection_ptr = &self->objects;
+									other_attr.object_ptr = obj;
+									other_attr.object_collection_ptr = &self->objects;
 									
 									std::cerr << "interact" << std::endl;
-									std::list<std::string> interact_dialog;
+									self->three->init(	std::move(player_attr),
+														std::move(other_attr),
+														world_position);
+								/*	std::list<std::string> interact_dialog;
 								//	interact_dialog = get_interact_list(*player, *obj);
 									interact_dialog = get_interact_list(player_attr, other_attr);
 
 									self->two = std::shared_ptr<dialog>(
-											new dialog(world_position, interact_dialog));
+											new dialog(world_position, interact_dialog));*/
 				//					self->one = dialog(mouse_position.x * 0.75, mouse_position.y * 0.75);
 								}
 							}
@@ -219,6 +226,7 @@ World::World(){
 	objects.add(npc->shared_from_this());
 	this->player = player;
 	
+	this->three = std::shared_ptr<interact_gui>(new interact_gui());
 }
 
 void World::Cicle(){
@@ -252,10 +260,12 @@ void World::Cicle(){
 //		one.draw(this->window, this->view);
 //		one.update(time, this->window, this->view);
 		
-		if(two != nullptr){
+/*		if(two != nullptr){
 			two->draw(this->window);
 			two->update(mouse_world_position(this->window, this->view));
-		}
+		}*/
+		three->draw(this->window);
+		three->update(mouse_world_position(this->window, this->view));
 		
 		this->window.draw(this->frame_sprite);
 		

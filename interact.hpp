@@ -12,6 +12,7 @@
 
 class object;
 class object_collection;
+class interact;
 
 std::list<std::string> get_interact_list(object &first, object &second);
 std::list<std::string> get_interact_list(object &first, std::shared_ptr<surface> second);
@@ -26,6 +27,10 @@ struct interact_attribute{
 
 std::list<std::string> get_interact_list(	interact_attribute &first,
 											interact_attribute &second);
+											
+std::shared_ptr<interact> find_interact(	std::string 		&command, 
+											interact_attribute 	&main_attr,
+											interact_attribute 	&service_attr);
 
 class interact{
 public:
