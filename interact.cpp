@@ -1,4 +1,5 @@
 #include "interact.hpp"
+#include "services.hpp"
 
 #include <cassert>
 
@@ -86,7 +87,7 @@ void contain_interact::execute_core(std::string command, interact_attribute &att
 		if(this->check_core("in", attr)){
 			this->object_contain = attr.object_ptr;
 			assert(attr.object_ptr);
-			attr.object_collection_ptr->destroy(attr.object_ptr);
+			attr.game_services_ptr->objects().destroy(attr.object_ptr);
 		}
 	} else if(command == "out"){
 		if(this->check_core("out", attr)){
@@ -94,7 +95,7 @@ void contain_interact::execute_core(std::string command, interact_attribute &att
 			object_interact = this->object_contain->get_interact();
 			object_interact->set_position(*this->object_contain, *attr.position);
 			
-			attr.object_collection_ptr->add(this->object_contain);
+			attr.game_services_ptr->objects().add(this->object_contain);
 			this->object_contain = nullptr;
 		}
 	}

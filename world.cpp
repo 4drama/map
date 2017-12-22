@@ -41,28 +41,26 @@ World::World(){
 	
 	this->window.setVerticalSyncEnabled(true);
 	
-	this->keyboard.add(sf::Keyboard::Left, [this](float time){
+	this->game.keyboard().add(sf::Keyboard::Left, [this](float time){
 				view.move(-0.5 * time, 0);
 			});			
-	this->keyboard.add(sf::Keyboard::Right, [this](float time){
+	this->game.keyboard().add(sf::Keyboard::Right, [this](float time){
 				view.move(0.5 * time, 0);
 			});			
-	this->keyboard.add(sf::Keyboard::Up, [this](float time){
+	this->game.keyboard().add(sf::Keyboard::Up, [this](float time){
 				view.move(0, -0.5 * time);
 			});			
-	this->keyboard.add(sf::Keyboard::Down, [this](float time){
+	this->game.keyboard().add(sf::Keyboard::Down, [this](float time){
 				view.move(0, 0.5 * time);
 			});
-	this->keyboard.add(sf::Mouse::Button::Left, [self = this](float time_arg){
+	this->game.keyboard().add(sf::Mouse::Button::Left, [self = this](float time_arg){
 				static float		time;
 				static sf::Clock 	clock;
 				
 				time = clock.getElapsedTime().asMilliseconds();				
 			
 					if(time > 50 || time == 0){
-			//			self->one.reset();
-					//	self->two = nullptr;
-						
+
 						sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
 						sf::Vector2f centre_position	= self->view.getCenter();
 						sf::Vector2f offset(	(self->resolution.width / 2) * 0.75,
@@ -75,10 +73,8 @@ World::World(){
 						std::cerr 	<< "world_position " 
 									<< world_position.x << ' ' << world_position.y << '\n';
 						
-					//	if(/*(self->two != nullptr) && self->two->check(world_position)*/){
-						if(self->three->check(world_position)){
-						//	std::cerr << self->two->get(world_position) << std::endl;
-							self->three->execute(world_position);
+						if(self->game.action_dialog()->check(world_position)){
+							self->game.action_dialog()->execute(world_position);
 							std::cerr << "execute" << std::endl;
 						} else {
 							std::shared_ptr<control_move> control;
@@ -89,22 +85,19 @@ World::World(){
 							if(current_object = self->player.lock())
 								current_object->set_control(control);
 						}
-					//	self->two = nullptr;
-						self->three->clean();
+						self->game.action_dialog()->clean();
 					}
 				
 				clock.restart();
 			});
-	this->keyboard.add(sf::Mouse::Button::Right, [self = this](float time_arg){
+	this->game.keyboard().add(sf::Mouse::Button::Right, [self = this](float time_arg){
 				static float		time;
 				static sf::Clock 	clock;
 				
 				time = clock.getElapsedTime().asMilliseconds();				
 			
 					if(time > 50 || time == 0){
-			//			self->one.reset();
-					//	self->two = nullptr;
-						self->three->clean();
+						self->game.action_dialog()->clean();
 						
 						sf::Vector2i mouse_position 	= sf::Mouse::getPosition(self->window);
 						sf::Vector2f centre_position	= self->view.getCenter();
@@ -121,7 +114,7 @@ World::World(){
 						std::list<std::shared_ptr<object> > objects;
 						
 
-						objects = self->map.get_objects(world_position);
+						objects = self->game.map().get_objects(world_position);
 						
 						if(objects.empty()){
 							/* surface interact */
@@ -139,23 +132,16 @@ World::World(){
 									interact_attribute player_attr;
 									player_attr.controlled_flag = 1;
 									player_attr.object_ptr = player;
-									player_attr.object_collection_ptr = &self->objects;
+									player_attr.game_services_ptr = &self->game;
 									
 									interact_attribute other_attr;
 									other_attr.object_ptr = obj;
-									other_attr.object_collection_ptr = &self->objects;
+									other_attr.game_services_ptr = &self->game;
 									
 									std::cerr << "interact" << std::endl;
-									self->three->init(	std::move(player_attr),
+									self->game.action_dialog()->init(	std::move(player_attr),
 														std::move(other_attr),
 														world_position);
-								/*	std::list<std::string> interact_dialog;
-								//	interact_dialog = get_interact_list(*player, *obj);
-									interact_dialog = get_interact_list(player_attr, other_attr);
-
-									self->two = std::shared_ptr<dialog>(
-											new dialog(world_position, interact_dialog));*/
-				//					self->one = dialog(mouse_position.x * 0.75, mouse_position.y * 0.75);
 								}
 							}
 						}
@@ -165,11 +151,10 @@ World::World(){
 			});
 	
 	
-	this->cache = std::shared_ptr<Cache>(new Cache());
-	this->cache_surface_ptr = std::shared_ptr<file_cache<surface> >(new file_cache<surface>());
-	//this->map = Map_collection("Data/complete_map.txt", this->cache, this->cache_surface_ptr);
+	this->game.textures() = std::shared_ptr<Cache>(new Cache());
+	this->game.surfaces() = std::shared_ptr<file_cache<surface> >(new file_cache<surface>());
 	
-	new (&this->map) Map_collection("Data/complete_map.txt", this->cache, this->cache_surface_ptr);
+	new (&this->game.map()) Map_collection("Data/complete_map.txt", this->game.textures(), this->game.surfaces());
 	
 	this->frame_texture.loadFromFile("Data/Texture/penek.png");
 	this->frame_sprite.setPosition(0, 0);
@@ -183,7 +168,7 @@ World::World(){
 	interact = std::shared_ptr<object_interact>(new object_interact());
 	control = std::shared_ptr<control_move>(new control_move());
 	graphics->init(&this->window);
-	interact->init(&this->map);
+	interact->init(&this->game.map());
 	control->set_target(geometry::Point{205, 365});
 	
 	object_attribute boat_attr;
@@ -217,16 +202,15 @@ World::World(){
 	npc->set_graphics(graphics);
 	npc->set_interact(interact);
 	
-//		control->update(*boat , 0);
 	control->update(*player , 0);
 	control->update(*npc , 0);
 
-	objects.add(boat->shared_from_this());
-	objects.add(player->shared_from_this());				
-	objects.add(npc->shared_from_this());
+	this->game.objects().add(boat->shared_from_this());
+	this->game.objects().add(player->shared_from_this());				
+	this->game.objects().add(npc->shared_from_this());
 	this->player = player;
 	
-	this->three = std::shared_ptr<interact_gui>(new interact_gui());
+	this->game.action_dialog() = std::shared_ptr<interact_gui>(new interact_gui());
 }
 
 void World::Cicle(){
@@ -249,23 +233,15 @@ void World::Cicle(){
 				- sf::Vector2f(	(	this->resolution.width / 2) * 0.75,
 								(	this->resolution.height / 2) * 0.75));
 		
-		this->keyboard.update(time);
+		this->game.keyboard().update(time);
 		
-		this->map.draw(this->window, this->view);
+		this->game.map().draw(this->window, this->view);
 					
-		objects.update(time);
-		objects.draw();
+		this->game.objects().update(time);
+		this->game.objects().draw();
 		
-		
-//		one.draw(this->window, this->view);
-//		one.update(time, this->window, this->view);
-		
-/*		if(two != nullptr){
-			two->draw(this->window);
-			two->update(mouse_world_position(this->window, this->view));
-		}*/
-		three->draw(this->window);
-		three->update(mouse_world_position(this->window, this->view));
+		this->game.action_dialog()->draw(this->window);
+		this->game.action_dialog()->update(mouse_world_position(this->window, this->view));
 		
 		this->window.draw(this->frame_sprite);
 		

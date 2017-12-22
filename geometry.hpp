@@ -21,6 +21,7 @@ namespace geometry{
 	Difference GetDifference(Point first, Point second);
 	
 	const bool operator==(const Point &arg1, const Point &arg2);
+	const bool operator!=(const Point &arg1, const Point &arg2);
 	
 	const Difference operator*(const Difference &arg1, double arg2);
 	
@@ -29,8 +30,6 @@ namespace geometry{
 	double Range(Point first, Point second);
 	
 	Point Shift(Point start_point, Point end_point, double time, double speed);
-	
-	const bool operator!=(const Point &arg1, const Point &arg2);
 }
 
 #endif

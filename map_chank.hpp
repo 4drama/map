@@ -13,6 +13,9 @@
 #include <vector>
 #include <list>
 
+class Tile;
+class Tile_base;
+
 class map_chank;
 class auto_loading_map_chank;
 

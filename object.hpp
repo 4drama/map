@@ -92,6 +92,11 @@ class object : public std::enable_shared_from_this<object> {
 	friend class interact_handler;
 public:
 	
+	/*
+	 * Need create class responsible for management,
+	 * and save pointer in object class
+	 */
+	
 	object() = default;
 	object(object_attribute &attr);
 	

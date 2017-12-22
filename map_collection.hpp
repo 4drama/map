@@ -20,6 +20,7 @@ public:
 	}
 };*/
 class Map_collection;
+class object;
 
 std::shared_ptr<surface> get_surface(sf::Vector2f new_position, Map_collection &map);
 

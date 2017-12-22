@@ -3,8 +3,6 @@
 
 #include "object.hpp"
 #include "surface.hpp"
-#include "object_collection.hpp"
-
 
 #include <list>
 #include <string>
@@ -13,6 +11,8 @@
 class object;
 class object_collection;
 class interact;
+class services;
+
 
 std::list<std::string> get_interact_list(object &first, object &second);
 std::list<std::string> get_interact_list(object &first, std::shared_ptr<surface> second);
@@ -21,7 +21,7 @@ struct interact_attribute{
 	bool 								controlled_flag			= 0;
 	std::shared_ptr<object> 			object_ptr				= nullptr;
 	std::shared_ptr<surface> 			surface_ptr				= nullptr;
-	object_collection 					*object_collection_ptr	= nullptr;
+	services 							*game_services_ptr		= nullptr;
 	std::shared_ptr<geometry::Point> 	position				= nullptr;
 };
 
