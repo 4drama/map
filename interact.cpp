@@ -52,11 +52,13 @@ std::list<std::string> interact::get(interact_attribute &attr) const{
 	return result;
 }
 
-void interact::execute(std::string name, interact_attribute &attr){
+void interact::execute(	std::string command,
+						interact_attribute &active_attr,
+						interact_attribute &passive_attr){
 	assert(!this->entry.empty());
 	
-	if(this->check_core(name, attr))
-		this->execute_core(name, attr);
+	if(this->check_core(command, active_attr))
+		this->execute_core(command, active_attr, passive_attr);
 }
 /*
 bool interact::check(std::string name, interact_attribute &attr){
@@ -82,20 +84,25 @@ contain_interact::contain_interact(std::list<std::string> entry_)
 		:	interact(entry_){
 }
 
-void contain_interact::execute_core(std::string command, interact_attribute &attr){
+void contain_interact::execute_core(	std::string command,
+										interact_attribute &active_attr,
+										interact_attribute &passive_attr){
 	if(command == "in"){
-		if(this->check_core("in", attr)){
-			this->object_contain = attr.object_ptr;
-			assert(attr.object_ptr);
-			attr.game_services_ptr->objects().destroy(attr.object_ptr);
+		if(this->check_core("in", active_attr)){
+			this->object_contain = active_attr.object_ptr;
+			assert(active_attr.object_ptr);
+			std::shared_ptr<controlled_object> control_obj; 
+			control_obj = active_attr.object_ptr->get_controlled();
+			passive_attr.object_ptr->set_controlled(control_obj);
+			active_attr.game_services_ptr->objects().destroy(active_attr.object_ptr);
 		}
 	} else if(command == "out"){
-		if(this->check_core("out", attr)){
+		if(this->check_core("out", active_attr)){
 			std::shared_ptr<interact_handler> object_interact;
 			object_interact = this->object_contain->get_interact();
-			object_interact->set_position(*this->object_contain, *attr.position);
+			object_interact->set_position(*this->object_contain, *active_attr.position);
 			
-			attr.game_services_ptr->objects().add(this->object_contain);
+			active_attr.game_services_ptr->objects().add(this->object_contain);
 			this->object_contain = nullptr;
 		}
 	}

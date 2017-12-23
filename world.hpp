@@ -25,7 +25,8 @@ private:
 	sf::Texture frame_texture;
 	sf::Sprite frame_sprite;
 
-	std::weak_ptr<object> player;
+//	std::weak_ptr<object> player;
+	std::shared_ptr<controlled_object> player;
 };
 
 #endif

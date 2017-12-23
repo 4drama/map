@@ -82,8 +82,9 @@ World::World(){
 							control->set_target(geometry::Point{world_position.x, world_position.y});
 							
 							std::shared_ptr<object> current_object;
-							if(current_object = self->player.lock())
+							if(current_object = self->player->get_object()){
 								current_object->set_control(control);
+							}
 						}
 						self->game.action_dialog()->clean();
 					}
@@ -122,7 +123,7 @@ World::World(){
 						
 							std::shared_ptr<object> player;
 							std::shared_ptr<interact_handler> player_interact;
-							if(player = self->player.lock())
+							if(player = self->player->get_object())
 								player_interact = player->get_interact();
 							else
 								return;
@@ -130,7 +131,6 @@ World::World(){
 							for (auto& obj : objects){
 								if(player_interact->check(*player, *obj)){
 									interact_attribute player_attr;
-									player_attr.controlled_flag = 1;
 									player_attr.object_ptr = player;
 									player_attr.game_services_ptr = &self->game;
 									
@@ -195,6 +195,8 @@ World::World(){
 	std::shared_ptr<object> player = std::shared_ptr<object>(new object(player_attr));
 	player->set_graphics(graphics);
 	player->set_interact(interact);
+	this->player = std::shared_ptr<controlled_object>(new controlled_object());
+	player->set_controlled(this->player);
 	
 	player_attr.position = geometry::Point{420, 450};
 	
@@ -208,7 +210,7 @@ World::World(){
 	this->game.objects().add(boat->shared_from_this());
 	this->game.objects().add(player->shared_from_this());				
 	this->game.objects().add(npc->shared_from_this());
-	this->player = player;
+//	this->player = player;
 	
 	this->game.action_dialog() = std::shared_ptr<interact_gui>(new interact_gui());
 }

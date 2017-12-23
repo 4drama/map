@@ -1,5 +1,18 @@
 #include "object.hpp"
 
+//#include <cassert>
+
+//===================controlled_object_implementation================
+std::shared_ptr<object> controlled_object::get_object(){	
+	return this->obj.lock();
+}
+
+void controlled_object::set_object(std::shared_ptr<object> obj_){
+	this->obj = obj_;
+}
+//-------------------------------------------------------------------
+
+
 //=======================object_implementation=======================
 object::object(object_attribute &attr)
 		:	position{attr.position},
@@ -61,6 +74,20 @@ std::shared_ptr<interact> object::find_interact(	std::string find_command,
 		}
 	}
 	return nullptr;
+}
+
+std::shared_ptr<controlled_object> object::get_controlled(){
+	return this->owner_ptr;
+}
+
+void object::set_controlled(std::shared_ptr<controlled_object> owner){
+	if(owner != nullptr){
+		if(auto old_obj = owner->get_object())
+			old_obj->set_controlled(nullptr);
+		this->owner_ptr = owner;
+		this->owner_ptr->set_object(this->shared_from_this());
+	} else 
+		this->owner_ptr = nullptr;
 }
 
 void object::draw(){

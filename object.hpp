@@ -19,6 +19,20 @@ class object;
 class interact;
 class interact_attribute;
 
+//===================controlled_object_declaration===================
+class controlled_object{
+public:
+	controlled_object() = default;
+	
+	std::shared_ptr<object> get_object();	
+	void set_object(std::shared_ptr<object> obj_);
+	
+private:
+	std::weak_ptr<object> obj;
+};
+//-------------------------------------------------------------------
+
+
 //====================control_handler_declaration====================
 class control_handler : public std::enable_shared_from_this<control_handler>{
 public:
@@ -113,6 +127,10 @@ public:
 	std::list<std::string> get_correct_interact_list(interact_attribute &attr);
 	std::shared_ptr<interact> find_interact(	std::string find_command,
 												interact_attribute &other_attr);
+	
+	std::shared_ptr<controlled_object> get_controlled();
+	void set_controlled(std::shared_ptr<controlled_object> owner);
+	
 //	void interact(std::string name, interact_attribute &attr);
 //	void interact
 	
@@ -137,6 +155,8 @@ private:
 	std::shared_ptr<control_handler>		control_ptr;
 	std::shared_ptr<interact_handler>		interact_ptr;
 	std::shared_ptr<graphics_handler>		graphics_ptr;
+	
+	std::shared_ptr<controlled_object>		owner_ptr;
 	
 	std::list<std::shared_ptr<interact> >	interact_list;
 };

@@ -11,9 +11,9 @@ void interact_gui::execute(sf::Vector2f 		world_position){
 	if(!current_interact){
 		current_interact = find_interact(entry, this->second_attr, this->first_attr);
 		assert(current_interact);
-		current_interact->execute(entry, this->first_attr);
+		current_interact->execute(entry, this->first_attr, this->second_attr);
 	} else{
-		current_interact->execute(entry, this->second_attr);
+		current_interact->execute(entry, this->second_attr, this->first_attr);
 	}	
 }
 
