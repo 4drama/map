@@ -95,6 +95,14 @@ std::list<std::shared_ptr<object> > Tile::get_objects() const {
 	}
 	return result;
 }
+
+void Tile::delete_object(std::shared_ptr<object> object_){
+	for (auto it = this->objects.begin(); it != this->objects.end(); ++it){
+		if(object_ == it->lock()){
+			this->objects.erase(it);
+		}
+	}
+}
 //-----------------------------------------------------------------------------
 
 //=============================Tile_base=======================================

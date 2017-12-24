@@ -25,6 +25,8 @@ public:
 	
 	std::list<std::shared_ptr<object> > get_objects() const;
 	
+	void delete_object(std::shared_ptr<object> object_);
+	
 /*	void test(){
 		texture = nullptr;
 		sprite.setTexture(*texture);

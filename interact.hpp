@@ -21,7 +21,7 @@ struct interact_attribute{
 	std::shared_ptr<object> 			object_ptr				= nullptr;
 	std::shared_ptr<surface> 			surface_ptr				= nullptr;
 	services 							*game_services_ptr		= nullptr;
-	std::shared_ptr<geometry::Point> 	position				= nullptr;
+	geometry::Point 					position;
 };
 
 std::list<std::string> get_interact_list(	interact_attribute &first,

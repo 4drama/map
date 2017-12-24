@@ -117,22 +117,35 @@ World::World(){
 
 						objects = self->game.map().get_objects(world_position);
 						
-						if(objects.empty()){
-							/* surface interact */
-						} else {
+						std::shared_ptr<object> player;
+						std::shared_ptr<interact_handler> player_interact;
+						if(player = self->player->get_object())
+							player_interact = player->get_interact();
+						else
+							return;
 						
-							std::shared_ptr<object> player;
-							std::shared_ptr<interact_handler> player_interact;
-							if(player = self->player->get_object())
-								player_interact = player->get_interact();
-							else
-								return;
+						interact_attribute player_attr;
+						player_attr.object_ptr = player;
+						player_attr.game_services_ptr = &self->game;
+			
+						if(objects.empty()){
+							std::list<std::vector<Tile>::iterator> current_tiles;
+							current_tiles = self->game.map().get_tile(world_position);
 							
+							interact_attribute surface_attr;
+							surface_attr.surface_ptr =
+									current_tiles.front()->get_surface(world_position);
+							
+							surface_attr.position = geometry::Point{world_position.x,
+									world_position.y};
+							
+							self->game.action_dialog()->init(	std::move(player_attr),
+									std::move(surface_attr),
+									world_position);
+							
+						} else {
 							for (auto& obj : objects){
 								if(player_interact->check(*player, *obj)){
-									interact_attribute player_attr;
-									player_attr.object_ptr = player;
-									player_attr.game_services_ptr = &self->game;
 									
 									interact_attribute other_attr;
 									other_attr.object_ptr = obj;

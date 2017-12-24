@@ -3,6 +3,8 @@
 
 #include <cassert>
 
+#include <iostream>
+
 std::list<std::string> get_interact_list(object &first, object &second){
 	std::list<std::string> result;
 	/* Need interact class which contain pair conformity.
@@ -24,6 +26,9 @@ std::list<std::string> get_interact_list(	interact_attribute &first_attr,
 		result.merge(first_attr.object_ptr->get_correct_interact_list(second_attr));
 	if(second_attr.object_ptr)
 		result.merge(second_attr.object_ptr->get_correct_interact_list(first_attr));
+	
+	result.unique();
+	
 	return result;
 }
 
@@ -91,18 +96,34 @@ void contain_interact::execute_core(	std::string command,
 		if(this->check_core("in", active_attr)){
 			this->object_contain = active_attr.object_ptr;
 			assert(active_attr.object_ptr);
-			std::shared_ptr<controlled_object> control_obj; 
+			
+			std::shared_ptr<controlled_object> control_obj; 		
 			control_obj = active_attr.object_ptr->get_controlled();
 			passive_attr.object_ptr->set_controlled(control_obj);
 			active_attr.game_services_ptr->objects().destroy(active_attr.object_ptr);
+			
+			std::list<std::vector<Tile>::iterator> destroy_object_tiles;
+			std::shared_ptr<interact_handler> destroy_interact_handler;
+			destroy_interact_handler = active_attr.object_ptr->get_interact();
+			geometry::Point destroy_position =
+					destroy_interact_handler->get_position(*active_attr.object_ptr);
+			destroy_object_tiles =
+					passive_attr.game_services_ptr->map().
+					get_tile(sf::Vector2f{destroy_position.x, destroy_position.y});
+			for(auto& current_tiles : destroy_object_tiles)
+				current_tiles->delete_object(active_attr.object_ptr);
 		}
 	} else if(command == "out"){
 		if(this->check_core("out", active_attr)){
 			std::shared_ptr<interact_handler> object_interact;
 			object_interact = this->object_contain->get_interact();
-			object_interact->set_position(*this->object_contain, *active_attr.position);
+			object_interact->set_position(*this->object_contain, active_attr.position);
+			passive_attr.game_services_ptr->objects().add(this->object_contain);
 			
-			active_attr.game_services_ptr->objects().add(this->object_contain);
+			std::shared_ptr<controlled_object> control_obj; 		
+			control_obj = passive_attr.object_ptr->get_controlled();
+			this->object_contain->set_controlled(control_obj);
+			
 			this->object_contain = nullptr;
 		}
 	}
