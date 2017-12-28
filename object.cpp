@@ -50,11 +50,15 @@ void object::add_interact(std::shared_ptr<interact> new_interact){
 	this->interact_list.push_front(new_interact);
 }
 
-std::list<std::string> object::get_correct_interact_list(interact_attribute &attr){
+std::list<std::string> object::get_correct_interact_list(interact_attribute &other_attr){
 	std::list<std::string> result;
 	
+	interact_attribute self_attr;
+	self_attr.object_ptr = this->shared_from_this();
+	self_attr.game_services_ptr = other_attr.game_services_ptr;
+	
 	for(auto& current : this->interact_list){
-		result.merge(current->get(attr));
+		result.merge(current->get(self_attr, other_attr));
 	}
 	
 	return result;
@@ -68,7 +72,7 @@ void object::interact(std::string name, interact_attribute &attr){
 std::shared_ptr<interact> object::find_interact(	std::string find_command, 
 													interact_attribute &other_attr){
 	for(auto& current_interact : this->interact_list){
-		for(std::string current_command : current_interact->get(other_attr)){
+		for(std::string current_command : this->get_correct_interact_list(other_attr)){
 			if(current_command == find_command)
 				return current_interact;
 		}

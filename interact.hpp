@@ -13,10 +13,6 @@ class object_collection;
 class interact;
 class services;
 
-
-std::list<std::string> get_interact_list(object &first, object &second);
-std::list<std::string> get_interact_list(object &first, std::shared_ptr<surface> second);
-
 struct interact_attribute{
 	std::shared_ptr<object> 			object_ptr				= nullptr;
 	std::shared_ptr<surface> 			surface_ptr				= nullptr;
@@ -34,7 +30,8 @@ std::shared_ptr<interact> find_interact(	std::string 		&command,
 class interact{
 public:
 	virtual ~interact() = 0;
-	std::list<std::string> get(interact_attribute &attr) const;
+	std::list<std::string> get(	interact_attribute &active_attr,
+								interact_attribute &passive_attr) const;
 	void execute(	std::string command,
 					interact_attribute &active_attr,
 					interact_attribute &passive_attr);	
@@ -45,7 +42,9 @@ private:
 	virtual void execute_core(	std::string command,
 								interact_attribute &active_attr,
 								interact_attribute &passive_attr) = 0;
-	virtual bool check_core(std::string, interact_attribute &attr) const = 0;
+	virtual bool check_core(	std::string command,
+								interact_attribute &active_attr,
+								interact_attribute &passive_attr) const = 0;
 protected:
 	interact() = delete;
 	interact(std::list<std::string> entry_);
@@ -63,7 +62,9 @@ private:
 	void execute_core(	std::string command,
 						interact_attribute &active_attr,
 						interact_attribute &passive_attr) override;
-	bool check_core(std::string, interact_attribute &attr) const override;
+	bool check_core(	std::string command,
+						interact_attribute &active_attr,
+						interact_attribute &passive_attr) const override;
 };
 
 #endif

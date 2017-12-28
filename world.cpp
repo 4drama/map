@@ -127,22 +127,26 @@ World::World(){
 						interact_attribute player_attr;
 						player_attr.object_ptr = player;
 						player_attr.game_services_ptr = &self->game;
-			
+						
+						geometry::Point world_position_point;
+						world_position_point = geometry::Point{	world_position.x,
+								world_position.y};
+						
 						if(objects.empty()){
-							std::list<std::vector<Tile>::iterator> current_tiles;
-							current_tiles = self->game.map().get_tile(world_position);
-							
-							interact_attribute surface_attr;
-							surface_attr.surface_ptr =
-									current_tiles.front()->get_surface(world_position);
-							
-							surface_attr.position = geometry::Point{world_position.x,
-									world_position.y};
-							
-							self->game.action_dialog()->init(	std::move(player_attr),
-									std::move(surface_attr),
-									world_position);
-							
+							if(player_interact->check(*player, world_position_point, 10)){
+								std::list<std::vector<Tile>::iterator> current_tiles;
+								current_tiles = self->game.map().get_tile(world_position);
+								
+								interact_attribute surface_attr;
+								surface_attr.surface_ptr =
+										current_tiles.front()->get_surface(world_position);
+								
+								surface_attr.position = world_position_point;
+								
+								self->game.action_dialog()->init(	std::move(player_attr),
+										std::move(surface_attr),
+										world_position);							
+							}
 						} else {
 							for (auto& obj : objects){
 								if(player_interact->check(*player, *obj)){
@@ -200,7 +204,7 @@ World::World(){
 	
 	
 	object_attribute player_attr;
-	player_attr.position = geometry::Point{400, 400};
+	player_attr.position = geometry::Point{250, 350};
 	player_attr.radius = 5;
 	player_attr.speed = 0.05;
 	player_attr.surface = SURFACE_TYPE::SOLID;
