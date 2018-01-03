@@ -21,4 +21,15 @@ private:
 	sf::RenderWindow *window;
 };
 
+class animation_graphics : public graphics_handler{
+public:
+
+	animation_graphics() = default;	
+	void draw(object &self) override;	
+	void init(sf::RenderWindow *window_);
+	
+private:
+	sf::RenderWindow *window;
+};
+
 #endif

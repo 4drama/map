@@ -7,8 +7,10 @@
 #include "graphics_handler.hpp"
 #include "interact_handler.hpp"
 #include "control_handler.hpp"
+#include "graphics.hpp"
 
 #include "interact.hpp"
+
 
 #include <fstream>
 #include <string>
@@ -19,6 +21,7 @@
 
 World::World(){
 	using interact_type = interact;
+	using graphics_type = graphics;
 	
 	std::fstream setting("setting.txt", std::ios::in);
 	std::string command;
@@ -195,7 +198,24 @@ World::World(){
 	boat_attr.surface = SURFACE_TYPE::LIQUID;
 			
 	std::shared_ptr<object> boat = std::shared_ptr<object>(new object(boat_attr));
-	boat->set_graphics(graphics);
+//	boat->set_graphics(graphics);
+	auto anim_graphics = std::shared_ptr<animation_graphics>(new animation_graphics());
+	anim_graphics->init(&this->window);
+	boat->set_graphics(anim_graphics);
+	
+	auto boat_anim_manager = std::shared_ptr<animation_manager>(new animation_manager());
+	auto boat_graphics = std::shared_ptr<graphics_type>(new graphics_type());
+	sf::Texture* main_boat_texture;
+	main_boat_texture = boat_graphics->add_texture("main", "Data/Texture/boat.png");
+	sf::IntRect rect(0, 0, 40, 40);
+	animation left_animation{};
+	left_animation.init(main_boat_texture);
+	left_animation.add_frame(rect, sf::Vector2f{28, 42});
+	boat_graphics->add_animation("Left", std::move(left_animation));
+	
+	boat_anim_manager->init(boat_graphics, "Left");
+	boat->set_animation_manager(boat_anim_manager);
+	
 	boat->set_interact(interact);
 	boat->set_control(control);
 	std::shared_ptr<interact_type> boat_interact;

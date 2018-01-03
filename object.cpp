@@ -23,27 +23,27 @@ object::object(object_attribute &attr)
 }
 
 void object::set_graphics(std::shared_ptr<graphics_handler> ptr){
-	graphics_ptr = ptr;
+	h_graphics_ptr = ptr;
 }
 
 std::shared_ptr<graphics_handler> object::get_graphics(){
-	return this->graphics_ptr;
+	return this->h_graphics_ptr;
 }
 
 void object::set_interact(std::shared_ptr<interact_handler> ptr){
-	interact_ptr = ptr;
+	h_interact_ptr = ptr;
 }
 
 std::shared_ptr<interact_handler> object::get_interact(){
-	return interact_ptr;
+	return h_interact_ptr;
 }
 
 void object::set_control(std::shared_ptr<control_handler> ptr){
-	control_ptr = ptr;
+	h_control_ptr = ptr;
 }
 
 std::shared_ptr<control_handler> object::get_control(){
-	return control_ptr;
+	return h_control_ptr;
 }
 
 void object::add_interact(std::shared_ptr<interact> new_interact){
@@ -94,15 +94,26 @@ void object::set_controlled(std::shared_ptr<controlled_object> owner){
 		this->owner_ptr = nullptr;
 }
 
+std::shared_ptr<animation_manager> object::get_animation_manager(){
+	return this->animation_ptr;
+}
+
+void object::set_animation_manager(std::shared_ptr<animation_manager> animation_manager_ptr){
+	this->animation_ptr = animation_manager_ptr;
+}
+
 void object::draw(){
-	if(graphics_ptr)
-		graphics_ptr->draw(*this);
+	if(h_graphics_ptr)
+		h_graphics_ptr->draw(*this);
 	this->child_draw();
 }
 
 void object::update(float time){
-	if(control_ptr)
-		control_ptr->update(*this, time);
+	if(h_control_ptr)
+		h_control_ptr->update(*this, time);
+	
+	if(animation_ptr)
+		animation_ptr->get_animation().update(time);
 	
 	this->child_update(time);
 }

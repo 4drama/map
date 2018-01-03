@@ -3,6 +3,7 @@
 
 #include "geometry.hpp"
 #include "surface.hpp"
+#include "graphics.hpp"
 
 #include <list>
 #include <string>
@@ -18,6 +19,14 @@ class object;
 
 class interact;
 class interact_attribute;
+
+/* 
+ * Create events in control_handler,
+ * graphics_handler is observe for this events.
+ * in objects contain observers and control_hendler send
+ * event.
+ */
+
 
 //===================controlled_object_declaration===================
 class controlled_object{
@@ -131,6 +140,9 @@ public:
 	std::shared_ptr<controlled_object> get_controlled();
 	void set_controlled(std::shared_ptr<controlled_object> owner);
 	
+	std::shared_ptr<animation_manager> get_animation_manager();
+	void set_animation_manager(std::shared_ptr<animation_manager> animation_manager_ptr_);
+
 //	void interact(std::string name, interact_attribute &attr);
 //	void interact
 	
@@ -152,11 +164,12 @@ private:
 	std::shared_ptr<surface> 				current_surface;
 	SURFACE_TYPE							surface_type;
 	
-	std::shared_ptr<control_handler>		control_ptr;
-	std::shared_ptr<interact_handler>		interact_ptr;
-	std::shared_ptr<graphics_handler>		graphics_ptr;
+	std::shared_ptr<control_handler>		h_control_ptr;
+	std::shared_ptr<interact_handler>		h_interact_ptr;
+	std::shared_ptr<graphics_handler>		h_graphics_ptr;
 	
 	std::shared_ptr<controlled_object>		owner_ptr;
+	std::shared_ptr<animation_manager>		animation_ptr;
 	
 	std::list<std::shared_ptr<interact> >	interact_list;
 };
