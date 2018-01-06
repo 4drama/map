@@ -2,6 +2,10 @@
 
 #include <cmath>
 
+//#include <iostream>
+
+#define PI 3.14159265
+
 geometry::Difference geometry::GetDifference(Point first, Point second){
 	return Difference{(second.x - first.x), (second.y - first.y)};
 }
@@ -54,4 +58,43 @@ geometry::Point geometry::Shift(	geometry::Point start_point,
 
 const bool geometry::operator!=(const geometry::Point &arg1, const geometry::Point &arg2){
 	return !(arg1 == arg2);
+}
+
+int geometry::Angle(geometry::Point first, geometry::Point second){
+	geometry::Point third{first.x, second.y};
+	
+	double a,/* b,*/ c;
+	int A, B, C;
+	
+	a = geometry::Range(first, third);
+//	b = geometry::Range(second, third);
+	c = geometry::Range(first, second);
+	
+	C = 90;
+	A = (asin(a/c) * 180.0 / PI);
+	B = 180 - A - C;
+	
+	if			((first.x == second.x) && (first.y > second.y)){
+		return 0;
+	}else if	((first.x < second.x) && (first.y > second.y)){
+		return B;
+	}else if	((first.x < second.x) && (first.y == second.y)){
+		return 90;
+	}else if	((first.x < second.x) && (first.y < second.y)){
+		return 180 - B;
+	}else if	((first.x == second.x) && (first.y < second.y)){
+		return 180;
+	}else if	((first.x > second.x) && (first.y < second.y)){
+		return 180 + B;
+	}else if	((first.x > second.x) && (first.y == second.y)){
+		return 270;
+	}else if	((first.x > second.x) && (first.y > second.y)){
+		return 360 - B;
+	}else
+		return 0;
+	
+//	std::cerr << "a "<< a <<". b " << b << ". c " << c << std::endl;
+//	std::cerr << "A "<< A <<". B " << B << ". C " << C << std::endl;	
+	
+//	return B;
 }

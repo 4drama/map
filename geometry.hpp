@@ -30,6 +30,8 @@ namespace geometry{
 	double Range(Point first, Point second);
 	
 	Point Shift(Point start_point, Point end_point, double time, double speed);
+	
+	int Angle(Point first, Point second);
 }
 
 #endif

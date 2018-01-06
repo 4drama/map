@@ -27,8 +27,8 @@ bool object_interact::walk(object &self, geometry::Point new_position){
 			this->set_surface(self, next_surface);
 			for (auto& current_tile : tiles){
 				current_tile->remove_object(self);
-			}				
-			this->set_position(self, new_position);
+			}			
+			this->set_position(self, new_position);			
 			std::list<std::vector<Tile>::iterator> current_tiles;
 			current_tiles = this->map->get_tile(
 					sf::Vector2f{(float)new_position.x, (float)new_position.y});

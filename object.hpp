@@ -4,6 +4,7 @@
 #include "geometry.hpp"
 #include "surface.hpp"
 #include "graphics.hpp"
+#include "observer.hpp"
 
 #include <list>
 #include <string>
@@ -148,6 +149,7 @@ public:
 	
 	void draw();
 	void update(float time);
+	void event(std::string msg, int value);
 	
 	virtual ~object() = default;
 	
@@ -170,6 +172,8 @@ private:
 	
 	std::shared_ptr<controlled_object>		owner_ptr;
 	std::shared_ptr<animation_manager>		animation_ptr;
+	
+	subject									observers;
 	
 	std::list<std::shared_ptr<interact> >	interact_list;
 };

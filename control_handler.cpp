@@ -21,7 +21,7 @@ void control_move::child_update(object &self, float time){
 		new_position = geometry::Shift(	old_position, this->end_position, time, new_speed);
 		
 		if(interact_ptr->walk(self, new_position)){
-			
+			self.event("rotate", geometry::Angle(old_position, new_position));
 		//	interact_ptr->set_surface(self, next_surface);
 		//	interact_ptr->set_position(self, new_position);
 		} else{

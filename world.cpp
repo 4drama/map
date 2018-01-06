@@ -207,13 +207,56 @@ World::World(){
 	auto boat_graphics = std::shared_ptr<graphics_type>(new graphics_type());
 	sf::Texture* main_boat_texture;
 	main_boat_texture = boat_graphics->add_texture("main", "Data/Texture/boat.png");
-	sf::IntRect rect(0, 0, 40, 40);
-	animation left_animation{};
-	left_animation.init(main_boat_texture);
-	left_animation.add_frame(rect, sf::Vector2f{28, 42});
-	boat_graphics->add_animation("Left", std::move(left_animation));
 	
-	boat_anim_manager->init(boat_graphics, "Left");
+	animation north_animation{};
+	sf::IntRect north_rect(80, 0, 40, 40);
+	north_animation.init(main_boat_texture);
+	north_animation.add_frame(north_rect, sf::Vector2f{30, 35});
+	boat_graphics->add_animation("North", std::move(north_animation));
+	
+	animation north_east_animation{};
+	sf::IntRect north_east_rect(40, 0, 40, 40);
+	north_east_animation.init(main_boat_texture);
+	north_east_animation.add_frame(north_east_rect, sf::Vector2f{32, 38});
+	boat_graphics->add_animation("North_East", std::move(north_east_animation));
+	
+	animation east_animation{};
+	sf::IntRect east_rect(0, 0, 40, 40);
+	east_animation.init(main_boat_texture);
+	east_animation.add_frame(east_rect, sf::Vector2f{28, 42});
+	boat_graphics->add_animation("East", std::move(east_animation));	
+	
+	animation south_east_animation{};
+	sf::IntRect south_east_rect(120, 40, 40, 40);
+	south_east_animation.init(main_boat_texture);
+	south_east_animation.add_frame(south_east_rect, sf::Vector2f{28, 38});
+	boat_graphics->add_animation("South_East", std::move(south_east_animation));
+	
+	animation south_animation{};
+	sf::IntRect south_rect(80, 40, 40, 40);
+	south_animation.init(main_boat_texture);
+	south_animation.add_frame(south_rect, sf::Vector2f{30, 35});
+	boat_graphics->add_animation("South", std::move(south_animation));
+	
+	animation south_west_animation{};
+	sf::IntRect south_west_rect(40, 40, 40, 40);
+	south_west_animation.init(main_boat_texture);
+	south_west_animation.add_frame(south_west_rect, sf::Vector2f{30, 35});
+	boat_graphics->add_animation("South_West", std::move(south_west_animation));
+	
+	animation west_animation{};
+	sf::IntRect west_rect(0, 40, 40, 40);
+	west_animation.init(main_boat_texture);
+	west_animation.add_frame(west_rect, sf::Vector2f{30, 35});
+	boat_graphics->add_animation("West", std::move(west_animation));
+	
+	animation north_west_animation{};
+	sf::IntRect north_west_rect(120, 0, 40, 40);
+	north_west_animation.init(main_boat_texture);
+	north_west_animation.add_frame(north_west_rect, sf::Vector2f{28, 35});
+	boat_graphics->add_animation("North_West", std::move(north_west_animation));
+	
+	boat_anim_manager->init(boat_graphics, "North");
 	boat->set_animation_manager(boat_anim_manager);
 	
 	boat->set_interact(interact);

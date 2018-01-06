@@ -100,6 +100,7 @@ std::shared_ptr<animation_manager> object::get_animation_manager(){
 
 void object::set_animation_manager(std::shared_ptr<animation_manager> animation_manager_ptr){
 	this->animation_ptr = animation_manager_ptr;
+	this->observers.add_observer(this->animation_ptr);
 }
 
 void object::draw(){
@@ -116,6 +117,10 @@ void object::update(float time){
 		animation_ptr->get_animation().update(time);
 	
 	this->child_update(time);
+}
+
+void object::event(std::string msg, int value){
+	this->observers.send_event(msg, value);
 }
 
 void object::child_draw(){

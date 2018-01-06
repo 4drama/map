@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "observer.hpp"
+
 #include <list>
 #include <memory>
 #include <utility>
@@ -32,18 +34,21 @@ public:
 	sf::Texture* add_texture(std::string name, std::string path);
 	void add_animation(std::string animation_name, animation &&new_animation);
 	animation& get_animation(std::string name);
+	bool check_animations(std::string name);
 private:
 	std::map<std::string, sf::Texture> textures;
 	std::map<std::string, animation> animations;
 };
 
-class animation_manager{
+class animation_manager : public observer{
 public:
 	void init(std::shared_ptr<graphics> graphics_ptr_, std::string start_animation);
 	
 	void set_animation(std::string name);
 	animation& get_animation();
 private:
+	void accept_event_core(std::string name, int value);
+	
 	std::string current_animation;
 	std::shared_ptr<graphics> graphics_ptr;
 };
